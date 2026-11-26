@@ -1,6 +1,6 @@
 /* CODE ADVENTURE - Service Worker untuk mode offline/PWA */
 'use strict';
-var CACHE = 'code-adventure-v2';
+var CACHE = 'code-adventure-v3';
 var CORE = [
   './', './index.html', './manifest.webmanifest', './sw.js',
   './assets/icon-192.png', './assets/icon-512.png',

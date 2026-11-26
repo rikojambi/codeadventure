@@ -38,6 +38,7 @@ Setelah halaman dimuat, service worker `sw.js` menyimpan semua aset inti ke Cach
 - Blok yang sedang dijalankan disorot; panel debugging menampilkan hubungan blok → gerakan.
 - Eksekusi berurutan, deterministik, dibatasi maksimal 4000 langkah untuk mencegah infinite loop.
 - Sistem penilaian: bintang 1–3, XP, level/rank, achievement, dan metrik efisiensi/percobaan/debug/loop/function (bukan kecepatan).
+- Setelan dibagi: siswa hanya bisa mengubah suara/kecepatan; PIN guru, profil, impor, dan hapus data dikunci dengan PIN.
 - Dashboard siswa: progres 10 level, kompetensi, badge, riwayat, papan peringkat lokal, pengelolaan profil.
 - Dashboard guru: kelas + kode kelas, siswa, Teacher Challenge, tabel progres, error umum, penggunaan blok, ekspor CSV/Excel/JSON, impor JSON.
 - Mode tambahan: Sandbox, Daily Challenge, batas blok (Challenge Mode), Code Preview, Solution Replay.
@@ -68,7 +69,7 @@ Setiap level memuat cerita, tujuan pembelajaran, materi singkat, contoh, tantang
 ## 4. Mode Guru
 
 1. Buka navigasi **👩‍🏫 Guru**.
-2. Masukkan PIN guru. Default: **1234** (dapat diubah di menu Setelan).
+2. Masukkan PIN guru. Default: **1234** (dapat diubah di menu **Setelan → Setelan Guru** setelah memasukkan PIN).
 3. Buat kelas → sistem membuat kode kelas 6 karakter.
 4. Tambah siswa lewat tombol **+ Siswa** atau **+ Siswa aktif**.
 5. Buat **Teacher Challenge** berdasarkan level existing dengan batas blok tertentu; tombol **Mainkan** memuat tantangan tersebut ke editor siswa.
@@ -143,7 +144,7 @@ Promise.all([
 ])
 ```
 
-Versi cache saat ini adalah `code-adventure-v2`; naikkan bila aset inti berubah agar pengguna mendapat versi baru otomatis.
+Versi cache saat ini adalah `code-adventure-v3`; naikkan bila aset inti berubah agar pengguna mendapat versi baru otomatis.
 
 **PIN guru terlupa?**
 Kunjungi Setelan; PIN saat ini ditampilkan di sana. Nilai awal adalah `1234`.

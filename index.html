@@ -226,35 +226,55 @@
 
     <!-- ============ SETTINGS ============ -->
     <main id="screen-settings" class="screen">
-      <section class="two-col">
-        <div class="card">
-          <h1>⚙️ Setelan</h1>
-          <div class="setting-row"><label for="setting-sound">🔊 Efek suara</label><input type="checkbox" id="setting-sound" checked></div>
-          <div class="setting-row"><label for="setting-speed">⏱ Kecepatan animasi</label><input type="range" id="setting-speed" min="150" max="1200" step="50" value="600"><span id="speed-label">600 ms</span></div>
-          <div class="setting-row"><label for="setting-pin">🔒 PIN guru</label><input id="setting-pin" type="text" maxlength="8" value="1234"></div>
-          <button class="btn primary" id="btn-save-settings">💾 Simpan Setelan</button>
-        </div>
-        <div class="card">
-          <h2>👤 Profil Siswa</h2>
-          <div id="profile-list" class="profile-list"></div>
-          <div class="inline-form">
-            <input id="new-profile-name" placeholder="Nama siswa baru" aria-label="Nama siswa baru">
-            <button class="btn primary" id="btn-add-profile">Tambah</button>
-          </div>
-          <div class="avatar-picker" id="avatar-picker"></div>
-          <h3 style="margin-top:18px">💾 Data</h3>
-          <div class="button-row">
-            <button class="btn ghost" id="btn-export-profile">⬇ Ekspor Progres</button>
-            <button class="btn ghost" id="btn-import-profile">⬆ Impor Progres</button>
-            <button class="btn danger" id="btn-reset-data">🗑 Hapus Semua Data</button>
-          </div>
-        </div>
-      </section>
       <section class="card">
-        <h2>📖 Tentang CODE ADVENTURE</h2>
-        <p>Game edukasi pemrograman dasar berbasis blok untuk siswa SMK. Dibangun dengan Phaser 3, Google Blockly, dan IndexedDB. Berjalan offline setelah diinstal sebagai PWA.</p>
-        <p class="muted">Tidak ada kode siswa yang dijalankan dengan eval(). Semua blok diterjemahkan oleh interpreter internal.</p>
+        <h1>⚙️ Setelan Siswa</h1>
+        <p class="muted">Preferensi berikut tersimpan otomatis di perangkat ini dan tidak mengubah data guru.</p>
+        <div class="setting-row"><label for="setting-sound">🔊 Efek suara</label><input type="checkbox" id="setting-sound" checked></div>
+        <div class="setting-row"><label for="setting-speed">⏱ Kecepatan animasi</label><input type="range" id="setting-speed" min="150" max="1200" step="50" value="600"><span id="speed-label">600 ms</span></div>
+        <button class="btn primary" id="btn-save-settings">💾 Simpan Preferensi</button>
       </section>
+
+      <section id="settings-gate" class="card gate-card">
+        <div class="gate-icon">🔒</div>
+        <h1>Setelan Guru</h1>
+        <p>PIN diperlukan untuk mengubah PIN guru, mengelola profil, mengimpor data, dan menghapus seluruh data.</p>
+        <div class="inline-form center">
+          <input id="settings-pin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN guru" aria-label="PIN guru">
+          <button class="btn primary" id="btn-settings-unlock">Masuk</button>
+        </div>
+        <p class="muted">PIN awal: <b>1234</b>. Jika sudah diubah, gunakan PIN terbaru.</p>
+      </section>
+
+      <div id="settings-teacher-content" class="hidden">
+        <section class="two-col">
+          <div class="card">
+            <h2>🔒 Setelan Guru</h2>
+            <div class="setting-row"><label for="setting-pin">PIN guru</label><input id="setting-pin" type="text" maxlength="8"></div>
+            <button class="btn primary" id="btn-save-teacher-settings">💾 Simpan PIN Guru</button>
+            <p class="muted">Setelah PIN disimpan, gunakan PIN ini untuk membuka Mode Guru dan Setelan Guru.</p>
+          </div>
+          <div class="card">
+            <h2>👤 Profil Siswa</h2>
+            <div id="profile-list" class="profile-list"></div>
+            <div class="inline-form">
+              <input id="new-profile-name" placeholder="Nama siswa baru" aria-label="Nama siswa baru">
+              <button class="btn primary" id="btn-add-profile">Tambah</button>
+            </div>
+            <div class="avatar-picker" id="avatar-picker"></div>
+            <h3 style="margin-top:18px">💾 Data</h3>
+            <div class="button-row">
+              <button class="btn ghost" id="btn-export-profile">⬇ Ekspor Progres</button>
+              <button class="btn ghost" id="btn-import-profile">⬆ Impor Progres</button>
+              <button class="btn danger" id="btn-reset-data">🗑 Hapus Semua Data</button>
+            </div>
+          </div>
+        </section>
+        <section class="card">
+          <h2>📖 Tentang CODE ADVENTURE</h2>
+          <p>Game edukasi pemrograman dasar berbasis blok untuk siswa SMK. Dibangun dengan Phaser 3, Google Blockly, dan IndexedDB. Berjalan offline setelah diinstal sebagai PWA.</p>
+          <p class="muted">Tidak ada kode siswa yang dijalankan dengan eval(). Semua blok diterjemahkan oleh interpreter internal.</p>
+        </section>
+      </div>
     </main>
   </div>
 

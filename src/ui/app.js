@@ -21,6 +21,7 @@
     blockUsage: {},
     replaySteps: [],
     installPrompt: null,
+    settingsUnlocked: false,
     saveTimer: null,
 
     async init() {
@@ -177,6 +178,7 @@
       if (name === 'sandbox') { this.setupLevel('sandbox'); name = 'game'; }
       else if (name === 'daily') { this.setupLevel(CA.createDailyLevel()); name = 'game'; }
       else if (name === 'teacher') { CA.Teacher.render(); }
+      else if (name === 'settings') { this.renderSettings(); }
 
       document.querySelectorAll('.screen').forEach(function (el) { el.classList.remove('active'); });
       var target = byId('screen-' + name);
@@ -276,7 +278,10 @@
       var speed = Storage.getSetting('speed', 600);
       byId('setting-speed').value = speed;
       byId('speed-label').textContent = speed + ' ms';
-      byId('setting-pin').value = Storage.getSetting('teacherPin', '1234');
+      var unlocked = CA.Teacher.unlocked || this.settingsUnlocked;
+      byId('settings-gate').classList.toggle('hidden', !!unlocked);
+      byId('settings-teacher-content').classList.toggle('hidden', !unlocked);
+      byId('setting-pin').value = unlocked ? Storage.getSetting('teacherPin', '1234') : '';
       byId('profile-list').innerHTML = Storage.listProfiles().map(function (item) {
         return '<div class="profile-item ' + (item.id === p.id ? 'active' : '') + '"><span class="avatar">' + item.avatar + '</span>' +
           '<span class="flex">' + util.escapeHtml(item.name) + ' · ' + item.xp + ' XP</span>' +
@@ -702,11 +707,30 @@
       byId('btn-save-settings').addEventListener('click', function () {
         Storage.setSetting('sound', byId('setting-sound').checked);
         Storage.setSetting('speed', Number(byId('setting-speed').value));
-        Storage.setSetting('teacherPin', byId('setting-pin').value.trim() || '1234');
         CA.Audio.setEnabled(byId('setting-sound').checked);
         self.scene.setSpeed(Number(byId('setting-speed').value));
+        self.renderSettings();
+        self.toast('Preferensi tersimpan.', 'success');
+      });
+
+      byId('btn-settings-unlock').addEventListener('click', function () {
+        var pin = byId('settings-pin').value.trim();
+        if (pin !== String(Storage.getSetting('teacherPin', '1234'))) {
+          self.toast('PIN salah. Setelan guru tetap terkunci.', 'error');
+          CA.Audio.play('error');
+          return;
+        }
+        self.settingsUnlocked = true;
+        CA.Teacher.unlocked = true;
+        self.renderSettings();
+        CA.Teacher.render();
+        self.toast('Setelan guru terbuka.', 'success');
+      });
+
+      byId('btn-save-teacher-settings').addEventListener('click', function () {
+        Storage.setSetting('teacherPin', byId('setting-pin').value.trim() || '1234');
         self.refreshAll();
-        self.toast('Setelan tersimpan.', 'success');
+        self.toast('PIN guru tersimpan.', 'success');
       });
       byId('setting-speed').addEventListener('input', function () { byId('speed-label').textContent = this.value + ' ms'; });
 

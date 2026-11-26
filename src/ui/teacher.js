@@ -18,6 +18,7 @@
         var pin = byId('teacher-pin').value.trim();
         if (pin === String(Storage.getSetting('teacherPin', '1234'))) {
           self.unlocked = true;
+          self.app.settingsUnlocked = true;
           self.app.toast('Mode guru terbuka.', 'success');
           self.app.showScreen('teacher');
           self.render();
