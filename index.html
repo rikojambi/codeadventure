@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1b3e">
+  <meta name="description" content="Code Adventure - game edukasi pemrograman dasar dengan visual block coding.">
+  <title>CODE ADVENTURE · Petualangan Kode</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon-192.png" type="image/png">
+  <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <button class="brand" data-screen="home" aria-label="Ke dashboard">
+        <span class="brand-icon">🤖</span>
+        <span class="brand-text">CODE <b>ADVENTURE</b></span>
+      </button>
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <button class="nav-btn active" data-screen="home">🏠 <span>Dashboard</span></button>
+        <button class="nav-btn" data-screen="levels">🗺️ <span>Level</span></button>
+        <button class="nav-btn" data-screen="sandbox">🛠️ <span>Sandbox</span></button>
+        <button class="nav-btn" data-screen="daily">📅 <span>Harian</span></button>
+        <button class="nav-btn" data-screen="teacher">👩‍🏫 <span>Guru</span></button>
+        <button class="nav-btn" data-screen="settings">⚙️ <span>Setelan</span></button>
+      </nav>
+      <div class="topbar-right">
+        <button id="sound-toggle" class="icon-btn" title="Suara">🔊</button>
+        <button id="profile-chip" class="profile-chip" title="Profil siswa"><span id="profile-avatar">🤖</span> <span id="profile-name">Siswa</span></button>
+      </div>
+    </header>
+
+    <!-- ============ DASHBOARD ============ -->
+    <main id="screen-home" class="screen active">
+      <section class="hero card">
+        <div class="hero-copy">
+          <div class="eyebrow">PETUALANGAN PEMROGRAMAN</div>
+          <h1>Halo, <span id="hero-name">Petualang</span>! 👋</h1>
+          <p>Susun blok, jalankan program, dan bantu Kiko menyelesaikan misi. Setiap level mengajarkan satu konsep pemrograman.</p>
+          <div class="hero-actions">
+            <button class="btn primary" id="btn-continue">▶ Lanjutkan Petualangan</button>
+            <button class="btn ghost" data-screen="levels">🗺️ Lihat Semua Level</button>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="robot-big">🤖</div>
+          <div class="orbit o1">🪙</div><div class="orbit o2">⚡</div><div class="orbit o3">🧩</div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="card stat-card"><div class="stat-icon">⭐</div><div><div class="stat-label">Total XP</div><div class="stat-value" id="stat-xp">0</div></div></div>
+        <div class="card stat-card"><div class="stat-icon">🎖️</div><div><div class="stat-label">Level Pemain</div><div class="stat-value" id="stat-rank">1</div></div></div>
+        <div class="card stat-card"><div class="stat-icon">🏁</div><div><div class="stat-label">Misi Selesai</div><div class="stat-value" id="stat-done">0/10</div></div></div>
+        <div class="card stat-card"><div class="stat-icon">📈</div><div><div class="stat-label">Progres</div><div class="stat-value" id="stat-progress">0%</div></div></div>
+      </section>
+
+      <section class="two-col">
+        <div class="card">
+          <h2>🗺️ Peta Petualangan</h2>
+          <div id="dashboard-levels" class="mini-level-grid"></div>
+        </div>
+        <div class="card">
+          <h2>🧠 Kompetensi</h2>
+          <div id="dashboard-competency"></div>
+          <h3 style="margin-top:18px">🏅 Achievement</h3>
+          <div id="dashboard-achievements" class="badge-list"></div>
+        </div>
+      </section>
+
+      <section class="two-col">
+        <div class="card">
+          <h2>📜 Riwayat Permainan</h2>
+          <div id="dashboard-history" class="history-list"></div>
+        </div>
+        <div class="card">
+          <h2>🏆 Papan Peringkat Kelas</h2>
+          <div id="dashboard-leaderboard" class="leaderboard"></div>
+          <div class="inline-form">
+            <input id="join-class-code" maxlength="6" placeholder="Kode kelas (opsional)" aria-label="Kode kelas">
+            <button class="btn small" id="btn-join-class">Gabung</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============ LEVEL SELECT ============ -->
+    <main id="screen-levels" class="screen">
+      <section class="page-head">
+        <h1>🗺️ Peta Level</h1>
+        <p>10 misi berurutan dari gerakan dasar hingga final project. Selesaikan level sebelumnya untuk membuka level berikutnya.</p>
+      </section>
+      <div id="level-grid" class="level-grid"></div>
+      <div class="card curriculum-card">
+        <h2>📚 Urutan Kurikulum</h2>
+        <div id="curriculum-list" class="curriculum-list"></div>
+      </div>
+    </main>
+
+    <!-- ============ GAME ============ -->
+    <main id="screen-game" class="screen">
+      <div class="game-layout">
+        <section class="game-left">
+          <div class="card mission-card">
+            <div class="mission-title">
+              <div><span id="mission-icon" class="mission-icon">🚀</span><h1 id="mission-title">Level</h1></div>
+              <div class="mission-meta">
+                <span id="mission-difficulty" class="chip">Level 1</span>
+                <span id="block-counter" class="chip blue">0 blok</span>
+                <label class="switch-label"><input type="checkbox" id="challenge-mode"> Mode Tantangan</label>
+              </div>
+            </div>
+            <div id="mission-content" class="mission-content"></div>
+            <div class="hint-row">
+              <button class="btn small warn" id="btn-hint">💡 Petunjuk bertahap</button>
+              <span id="hint-status" class="muted">Petunjuk membantu Anda berpikir, bukan memberi jawaban.</span>
+            </div>
+          </div>
+
+          <div class="card game-card">
+            <div class="canvas-wrap">
+              <div id="game-canvas"></div>
+              <div class="canvas-badges">
+                <span id="status-badge" class="status-badge">SIAP</span>
+                <span id="robot-state" class="status-badge ghost">Arah: kanan</span>
+              </div>
+            </div>
+            <div class="canvas-footer">
+              <div id="relation-panel" class="relation">🔗 Hubungan blok → gerakan akan muncul saat program berjalan.</div>
+              <div id="progress-track" class="progress-track"><div id="progress-fill"></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card editor-card">
+          <div class="editor-header">
+            <div>
+              <h2>🧩 Editor Blok</h2>
+              <span class="muted" id="editor-subtitle">Susun blok lalu tekan RUN</span>
+            </div>
+            <div class="mobile-toolbar-toggle">
+              <button class="btn small" id="toolbox-toggle">☰ Toolbox</button>
+            </div>
+          </div>
+          <div class="control-bar">
+            <button class="btn run" id="btn-run">▶ RUN</button>
+            <button class="btn stop" id="btn-stop">■ STOP</button>
+            <button class="btn reset" id="btn-reset">↺ RESET</button>
+            <button class="btn step" id="btn-step">⏭ STEP</button>
+            <button class="icon-btn" id="btn-undo" title="Undo">↶</button>
+            <button class="icon-btn" id="btn-redo" title="Redo">↷</button>
+            <button class="btn small ghost" id="btn-preview">{ } Preview</button>
+            <button class="btn small ghost" id="btn-replay">▶| Replay</button>
+          </div>
+          <div id="blocklyDiv" class="blockly-div"></div>
+          <div class="message-panel">
+            <div class="message-head"><b>💬 Panel Pesan & Debug</b><button class="link-btn" id="btn-clear-log">Bersihkan</button></div>
+            <div id="message-list" class="message-list" aria-live="polite"></div>
+          </div>
+          <div class="mobile-run-bar"><button class="btn run" id="btn-run-mobile">▶ RUN</button></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ============ TEACHER ============ -->
+    <main id="screen-teacher" class="screen">
+      <section id="teacher-gate" class="card gate-card">
+        <div class="gate-icon">🔒</div>
+        <h1>Mode Guru</h1>
+        <p>Mode ini terpisah dari pengalaman siswa. Masukkan PIN guru untuk mengelola kelas.</p>
+        <div class="inline-form center">
+          <input id="teacher-pin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN guru" aria-label="PIN guru">
+          <button class="btn primary" id="btn-teacher-login">Masuk</button>
+        </div>
+        <p class="muted">PIN awal: <b>1234</b> (dapat diubah di Setelan)</p>
+      </section>
+      <div id="teacher-content" class="teacher-content hidden">
+        <section class="page-head">
+          <h1>👩‍🏫 Dashboard Guru</h1>
+          <p>Kelola kelas, pantau progres siswa, dan unduh laporan. Data tersimpan lokal di perangkat ini.</p>
+        </section>
+        <section class="two-col">
+          <div class="card">
+            <h2>➕ Buat Kelas</h2>
+            <div class="inline-form">
+              <input id="class-name" placeholder="Nama kelas, cth: XI RPL 1" aria-label="Nama kelas">
+              <button class="btn primary" id="btn-create-class">Buat</button>
+            </div>
+            <div id="teacher-classes" class="class-list"></div>
+          </div>
+          <div class="card">
+            <h2>🧩 Buat Tantangan Guru</h2>
+            <div class="inline-form">
+              <input id="challenge-name" placeholder="Nama tantangan" aria-label="Nama tantangan">
+              <select id="challenge-base" aria-label="Level dasar"></select>
+            </div>
+            <div class="inline-form">
+              <input id="challenge-limit" type="number" min="1" max="40" value="6" placeholder="Batas blok" aria-label="Batas blok">
+              <button class="btn" id="btn-create-challenge">Simpan</button>
+            </div>
+            <div id="teacher-challenges" class="class-list"></div>
+          </div>
+        </section>
+        <section class="card">
+          <h2>📊 Progres Siswa</h2>
+          <div class="table-wrap"><table id="teacher-student-table" class="data-table"></table></div>
+        </section>
+        <section class="two-col">
+          <div class="card"><h2>🐞 Kesalahan Umum</h2><div class="table-wrap"><table id="teacher-error-table" class="data-table"></table></div></div>
+          <div class="card"><h2>🔢 Penggunaan Blok</h2><div class="table-wrap"><table id="teacher-block-table" class="data-table"></table></div></div>
+        </section>
+        <section class="card">
+          <h2>📥 Ekspor / Impor Data</h2>
+          <div class="button-row">
+            <button class="btn" id="btn-export-csv">⬇ CSV Siswa</button>
+            <button class="btn" id="btn-export-csv-level">⬇ CSV Nilai Level</button>
+            <button class="btn" id="btn-export-xls">⬇ Excel (.xls)</button>
+            <button class="btn" id="btn-export-json">⬇ JSON Progres</button>
+            <button class="btn ghost" id="btn-import-json">⬆ Impor JSON</button>
+            <input type="file" id="import-file" accept=".json,application/json" hidden>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ============ SETTINGS ============ -->
+    <main id="screen-settings" class="screen">
+      <section class="two-col">
+        <div class="card">
+          <h1>⚙️ Setelan</h1>
+          <div class="setting-row"><label for="setting-sound">🔊 Efek suara</label><input type="checkbox" id="setting-sound" checked></div>
+          <div class="setting-row"><label for="setting-speed">⏱ Kecepatan animasi</label><input type="range" id="setting-speed" min="150" max="1200" step="50" value="600"><span id="speed-label">600 ms</span></div>
+          <div class="setting-row"><label for="setting-pin">🔒 PIN guru</label><input id="setting-pin" type="text" maxlength="8" value="1234"></div>
+          <button class="btn primary" id="btn-save-settings">💾 Simpan Setelan</button>
+        </div>
+        <div class="card">
+          <h2>👤 Profil Siswa</h2>
+          <div id="profile-list" class="profile-list"></div>
+          <div class="inline-form">
+            <input id="new-profile-name" placeholder="Nama siswa baru" aria-label="Nama siswa baru">
+            <button class="btn primary" id="btn-add-profile">Tambah</button>
+          </div>
+          <div class="avatar-picker" id="avatar-picker"></div>
+          <h3 style="margin-top:18px">💾 Data</h3>
+          <div class="button-row">
+            <button class="btn ghost" id="btn-export-profile">⬇ Ekspor Progres</button>
+            <button class="btn ghost" id="btn-import-profile">⬆ Impor Progres</button>
+            <button class="btn danger" id="btn-reset-data">🗑 Hapus Semua Data</button>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <h2>📖 Tentang CODE ADVENTURE</h2>
+        <p>Game edukasi pemrograman dasar berbasis blok untuk siswa SMK. Dibangun dengan Phaser 3, Google Blockly, dan IndexedDB. Berjalan offline setelah diinstal sebagai PWA.</p>
+        <p class="muted">Tidak ada kode siswa yang dijalankan dengan eval(). Semua blok diterjemahkan oleh interpreter internal.</p>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="toast-root" aria-live="polite"></div>
+
+  <script src="vendor/phaser/phaser.min.js"></script>
+  <script src="vendor/blockly/blockly_compressed.js"></script>
+  <script src="vendor/blockly/blocks_compressed.js"></script>
+  <script src="vendor/blockly/msg/id.js"></script>
+  <script src="src/core/util.js"></script>
+  <script src="src/core/storage.js"></script>
+  <script src="src/core/audio.js"></script>
+  <script src="src/core/scoring.js"></script>
+  <script src="src/game/levels.js"></script>
+  <script src="src/game/world.js"></script>
+  <script src="src/game/scene.js"></script>
+  <script src="src/blocks/definitions.js"></script>
+  <script src="src/blocks/toolbox.js"></script>
+  <script src="src/engine/interpreter.js"></script>
+  <script src="src/ui/pseudocode.js"></script>
+  <script src="src/ui/export.js"></script>
+  <script src="src/ui/teacher.js"></script>
+  <script src="src/ui/app.js"></script>
+</body>
+</html>
